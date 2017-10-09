@@ -4,4 +4,5 @@
   <string name="permission_required_toast">Location permission is required for this Application.</string>
   <string name="permission_rationale_location">Access to the location service is required to get your location details.</string>
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDyZD25gUTa_BaDXmUpuqQuWWHTUI7snjQ</string>
+  <string name="title_activity_location_alarm">LocationAlarmActivity</string>
 </resources>
