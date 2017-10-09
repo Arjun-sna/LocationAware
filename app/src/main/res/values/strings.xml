@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">MapsAlarm</string>
+  <string name="location_permission_denied">This Application requires location permission to be enabled.</string>
+  <string name="permission_required_toast">Location permission is required for this Application.</string>
+  <string name="permission_rationale_location">Access to the location service is required to get your location details.</string>
+  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDyZD25gUTa_BaDXmUpuqQuWWHTUI7snjQ</string>
 </resources>
