@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import dagger.Module;
 import dagger.Provides;
-import in.arjsna.mapsalarm.LocationProvider;
+import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.di.scopes.ActivityScope;
 import in.arjsna.mapsalarm.locationalarm.LocationAlarmMVPContract;

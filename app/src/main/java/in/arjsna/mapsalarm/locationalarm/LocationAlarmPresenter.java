@@ -1,7 +1,7 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.content.Context;
-import in.arjsna.mapsalarm.LocationProvider;
+import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.mvpbase.BasePresenter;
 import javax.inject.Inject;

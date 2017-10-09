@@ -1,4 +1,4 @@
-package in.arjsna.mapsalarm;
+package in.arjsna.mapsalarm.global;
 
 import android.app.Application;
 import in.arjsna.mapsalarm.di.components.DaggerApplicationComponent;

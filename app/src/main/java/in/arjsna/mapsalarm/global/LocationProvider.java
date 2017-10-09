@@ -1,4 +1,4 @@
-package in.arjsna.mapsalarm;
+package in.arjsna.mapsalarm.global;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
+import in.arjsna.mapsalarm.global.AppLocationListener;
 import javax.inject.Inject;
 
 public class LocationProvider {

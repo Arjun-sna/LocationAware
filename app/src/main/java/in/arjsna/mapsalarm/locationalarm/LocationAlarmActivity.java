@@ -3,7 +3,6 @@ package in.arjsna.mapsalarm.locationalarm;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -14,8 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import in.arjsna.mapsalarm.LocationProvider;
-import in.arjsna.mapsalarm.PermissionUtils;
+import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.R;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
 import javax.inject.Inject;
@@ -29,10 +27,7 @@ public class LocationAlarmActivity extends BaseActivity
 
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
-  private LocationManager locationManager;
   private FrameLayout mMapHolderLayout;
-
-  @Inject public LocationProvider locationProvider;
 
   @Inject
   public LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>

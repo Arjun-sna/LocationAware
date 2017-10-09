@@ -1,4 +1,4 @@
-package in.arjsna.mapsalarm;
+package in.arjsna.mapsalarm.global;
 
 import android.location.Location;
 

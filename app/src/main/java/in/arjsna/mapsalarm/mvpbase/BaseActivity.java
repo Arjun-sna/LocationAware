@@ -3,7 +3,7 @@ package in.arjsna.mapsalarm.mvpbase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import in.arjsna.mapsalarm.LocationAware;
+import in.arjsna.mapsalarm.global.LocationAware;
 import in.arjsna.mapsalarm.di.components.DaggerActivityComponent;
 import in.arjsna.mapsalarm.di.modules.ActivityModule;
 

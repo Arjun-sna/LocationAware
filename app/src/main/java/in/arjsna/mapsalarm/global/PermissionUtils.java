@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package in.arjsna.mapsalarm;
+package in.arjsna.mapsalarm.global;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -26,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+import in.arjsna.mapsalarm.R;
 
 /**
  * Utility class for access to runtime permissions.
