@@ -1,24 +1,26 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import in.arjsna.mapsalarm.LocationProvider;
 import in.arjsna.mapsalarm.PermissionUtils;
 import in.arjsna.mapsalarm.R;
+import in.arjsna.mapsalarm.mvpbase.BaseActivity;
+import javax.inject.Inject;
 
-public class LocationAlarmActivity extends AppCompatActivity
+public class LocationAlarmActivity extends BaseActivity
     implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, LocationAlarmMVPContract.ILocationAlarmView {
   private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -29,14 +31,20 @@ public class LocationAlarmActivity extends AppCompatActivity
   private boolean mPermissionDenied = false;
   private LocationManager locationManager;
   private FrameLayout mMapHolderLayout;
-  private LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
+
+  @Inject public LocationProvider locationProvider;
+
+  @Inject
+  public LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
       locationPresenter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_location_alarm);
-    locationPresenter = new LocationAlarmPresenter<>();
-    locationPresenter.onAttach(this);
+    if (getActivityComponent() != null) {
+      getActivityComponent().inject(this);
+      locationPresenter.onAttach(this);
+    }
     initView();
   }
 
@@ -55,13 +63,8 @@ public class LocationAlarmActivity extends AppCompatActivity
           Manifest.permission.ACCESS_FINE_LOCATION, true);
     } else if (mMap != null) {
       mMap.setMyLocationEnabled(true);
-      getCurrentLocation();
+      locationPresenter.onLocationPermissionGranted();
     }
-  }
-
-  @SuppressLint("MissingPermission") private void getCurrentLocation() {
-    //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE,
-    //    this);
   }
 
   @Override public boolean onMyLocationButtonClick() {
@@ -73,10 +76,14 @@ public class LocationAlarmActivity extends AppCompatActivity
   }
 
   @Override public void onMapReady(GoogleMap googleMap) {
+    initialiseMap(googleMap);
+    getPermissionAndEnableLocation();
+  }
+
+  private void initialiseMap(GoogleMap googleMap) {
     mMap = googleMap;
     mMap.setOnMyLocationButtonClickListener(this);
     mMap.setOnMyLocationClickListener(this);
-    getPermissionAndEnableLocation();
   }
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -103,5 +110,10 @@ public class LocationAlarmActivity extends AppCompatActivity
   private void showMissingPermissionError() {
     PermissionUtils.PermissionDeniedDialog.newInstance(true)
         .show(getSupportFragmentManager(), "dialog");
+  }
+
+  @Override public void updateCurrentLocation(Location location) {
+    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+        new LatLng(location.getLatitude(), location.getLongitude()), 15), 10, null);
   }
 }
