@@ -18,4 +18,8 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   @Override public void onLocationPermissionGranted() {
     locationProvider.getLocation(location -> getView().updateCurrentLocation(location));
   }
+
+  @Override public void onLocationPinClicked() {
+    getView().getLocationDropMarker();
+  }
 }

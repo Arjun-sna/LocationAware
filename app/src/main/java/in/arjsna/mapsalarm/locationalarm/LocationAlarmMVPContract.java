@@ -8,10 +8,14 @@ public interface LocationAlarmMVPContract {
   interface ILocationAlarmView extends IMVPView {
 
     void updateCurrentLocation(Location location);
+
+    void getLocationDropMarker();
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {
 
     void onLocationPermissionGranted();
+
+    void onLocationPinClicked();
   }
 }

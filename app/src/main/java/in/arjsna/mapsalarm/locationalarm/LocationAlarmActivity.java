@@ -7,14 +7,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import in.arjsna.mapsalarm.global.PermissionUtils;
+import com.google.android.gms.maps.model.MarkerOptions;
 import in.arjsna.mapsalarm.R;
+import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
 import javax.inject.Inject;
 
@@ -28,10 +32,12 @@ public class LocationAlarmActivity extends BaseActivity
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
   private FrameLayout mMapHolderLayout;
+  private ImageView locationPin;
 
   @Inject
   public LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
       locationPresenter;
+  private Location currentLocation;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,9 +52,30 @@ public class LocationAlarmActivity extends BaseActivity
   private void initView() {
     //Toolbar toolbar = findViewById(R.id.toolbar);
     //setSupportActionBar(toolbar);
+    locationPin = findViewById(R.id.location_pin);
     SupportMapFragment supportMapFragment =
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     supportMapFragment.getMapAsync(this);
+    bindEvents();
+  }
+
+  private void bindEvents() {
+    locationPin.setOnClickListener(v -> {
+      locationPresenter.onLocationPinClicked();
+    });
+  }
+
+  @Override public void getLocationDropMarker() {
+    LatLng target = mMap.getCameraPosition().target;
+    mMap.addMarker(
+        new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin))
+            .position(target)
+            .draggable(false));
+    mMap.addCircle(new CircleOptions().center(target).clickable(false).radius(200).strokeWidth(5));
+    float[] results = new float[2];
+    Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+        target.latitude, target.longitude, results);
+    Toast.makeText(LocationAlarmActivity.this, " " + results[0] / 1000, Toast.LENGTH_SHORT).show();
   }
 
   private void getPermissionAndEnableLocation() {
@@ -108,7 +135,13 @@ public class LocationAlarmActivity extends BaseActivity
   }
 
   @Override public void updateCurrentLocation(Location location) {
+    this.currentLocation = location;
     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
         new LatLng(location.getLatitude(), location.getLongitude()), 15), 10, null);
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    locationPresenter.onDetach();
   }
 }
