@@ -10,7 +10,7 @@ public abstract class AppDataBase extends RoomDatabase {
   private CheckPointDataSource recordItemDataSource;
 
   public abstract CheckPointDao checkPointDao();
-  private static final String DATABASE_NAME = "saved_recordings.db";
+  private static final String DATABASE_NAME = "location_aware.db";
 
   private static AppDataBase appDataBaseInstance;
 

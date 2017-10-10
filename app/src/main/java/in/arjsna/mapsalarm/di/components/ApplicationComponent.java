@@ -2,6 +2,7 @@ package in.arjsna.mapsalarm.di.components;
 
 import android.content.Context;
 import dagger.Component;
+import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.global.LocationAware;
 import in.arjsna.mapsalarm.di.modules.ApplicationModule;
 import in.arjsna.mapsalarm.di.qualifiers.ApplicationContext;
@@ -14,4 +15,5 @@ public interface ApplicationComponent {
 
   @ApplicationContext Context getContext();
 
+  CheckPointDataSource getCheckPointDataSource();
 }

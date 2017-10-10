@@ -19,5 +19,7 @@ public interface LocationAlarmMVPContract {
     void onLocationPermissionGranted();
 
     void onLocationPinClicked();
+
+    void onSetCheckPoint(String checkpointName, double latitude, double longitude);
   }
 }

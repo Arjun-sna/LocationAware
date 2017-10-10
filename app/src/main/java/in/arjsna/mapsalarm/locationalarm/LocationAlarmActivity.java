@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jakewharton.rxbinding2.view.RxView;
 import in.arjsna.mapsalarm.R;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.PermissionUtils;
@@ -32,12 +34,9 @@ public class LocationAlarmActivity extends BaseActivity
     implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, LocationAlarmMVPContract.ILocationAlarmView {
   private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-  private static final long MIN_TIME = 400;
-  private static final float MIN_DISTANCE = 1000;
 
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
-  private FrameLayout mMapHolderLayout;
   private ImageView locationPin;
 
   @Inject
@@ -72,16 +71,29 @@ public class LocationAlarmActivity extends BaseActivity
     });
   }
 
-  @Override
-  public void showAddCheckPointDialog() {
+  @Override public void showAddCheckPointDialog() {
     LatLng target = mMap.getCameraPosition().target;
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
     View dialogView =
         LayoutInflater.from(context).inflate(R.layout.set_checkpoint_dialog_view, null, false);
-    ((TextView)dialogView.findViewById(R.id.check_point_lat_tv)).setText(String.valueOf(target.latitude));
-    ((TextView)dialogView.findViewById(R.id.check_point_long_tv)).setText(String.valueOf(target.longitude));
-    builder.setView(dialogView)
-        .show();
+    ((TextView) dialogView.findViewById(R.id.check_point_lat_tv)).setText(
+        String.valueOf(target.latitude));
+    ((TextView) dialogView.findViewById(R.id.check_point_long_tv)).setText(
+        String.valueOf(target.longitude));
+    EditText nameEditText = dialogView.findViewById(R.id.check_point_name_et);
+    AlertDialog alertDialog = builder.setView(dialogView).show();
+    RxView.clicks(dialogView.findViewById(R.id.set_checkpoint_done_btn)).subscribe(__ -> {
+      String enteredText = nameEditText.getText().toString();
+      if (enteredText.length() >= 4) {
+        locationPresenter.onSetCheckPoint(enteredText, target.latitude, target.longitude);
+        alertDialog.dismiss();
+      } else {
+        nameEditText.setError("Name should have minimum of 4 characters.");
+      }
+    });
+    RxView.clicks(dialogView.findViewById(R.id.set_checkpoint_cancel_btn)).subscribe(__ -> {
+      alertDialog.dismiss();
+    });
   }
 
   @Override public void getLocationDropMarker() {
