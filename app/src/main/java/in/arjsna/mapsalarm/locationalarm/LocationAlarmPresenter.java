@@ -20,6 +20,6 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   }
 
   @Override public void onLocationPinClicked() {
-    getView().getLocationDropMarker();
+    getView().showAddCheckPointDialog();
   }
 }

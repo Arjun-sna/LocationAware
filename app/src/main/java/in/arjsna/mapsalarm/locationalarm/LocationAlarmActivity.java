@@ -1,13 +1,18 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +23,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import in.arjsna.mapsalarm.R;
+import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
 import javax.inject.Inject;
@@ -37,6 +43,7 @@ public class LocationAlarmActivity extends BaseActivity
   @Inject
   public LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
       locationPresenter;
+  @Inject @ActivityContext public Context context;
   private Location currentLocation;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,18 @@ public class LocationAlarmActivity extends BaseActivity
     });
   }
 
+  @Override
+  public void showAddCheckPointDialog() {
+    LatLng target = mMap.getCameraPosition().target;
+    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    View dialogView =
+        LayoutInflater.from(context).inflate(R.layout.set_checkpoint_dialog_view, null, false);
+    ((TextView)dialogView.findViewById(R.id.check_point_lat_tv)).setText(String.valueOf(target.latitude));
+    ((TextView)dialogView.findViewById(R.id.check_point_long_tv)).setText(String.valueOf(target.longitude));
+    builder.setView(dialogView)
+        .show();
+  }
+
   @Override public void getLocationDropMarker() {
     LatLng target = mMap.getCameraPosition().target;
     mMap.addMarker(
@@ -73,6 +92,7 @@ public class LocationAlarmActivity extends BaseActivity
             .draggable(false));
     mMap.addCircle(new CircleOptions().center(target).clickable(false).radius(200).strokeWidth(5));
     float[] results = new float[2];
+
     Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
         target.latitude, target.longitude, results);
     Toast.makeText(LocationAlarmActivity.this, " " + results[0] / 1000, Toast.LENGTH_SHORT).show();

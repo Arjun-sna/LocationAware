@@ -10,6 +10,8 @@ public interface LocationAlarmMVPContract {
     void updateCurrentLocation(Location location);
 
     void getLocationDropMarker();
+
+    void showAddCheckPointDialog();
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {

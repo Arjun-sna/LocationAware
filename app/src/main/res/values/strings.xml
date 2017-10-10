@@ -5,4 +5,7 @@
   <string name="permission_rationale_location">Access to the location service is required to get your location details.</string>
   <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDyZD25gUTa_BaDXmUpuqQuWWHTUI7snjQ</string>
   <string name="title_activity_location_alarm">LocationAlarmActivity</string>
+  <string name="done">Done</string>
+  <string name="cancel">Cancel</string>
+  <string name="check_point_name_hint">Enter a name for this check point</string>
 </resources>
