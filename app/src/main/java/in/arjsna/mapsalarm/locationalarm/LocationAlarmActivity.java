@@ -1,7 +1,9 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,10 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +36,7 @@ public class LocationAlarmActivity extends BaseActivity
     implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, LocationAlarmMVPContract.ILocationAlarmView {
   private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+  private static final int REQUEST_CHECK_SETTINGS = 2;
 
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
@@ -94,6 +97,22 @@ public class LocationAlarmActivity extends BaseActivity
     RxView.clicks(dialogView.findViewById(R.id.set_checkpoint_cancel_btn)).subscribe(__ -> {
       alertDialog.dismiss();
     });
+  }
+
+  @Override public void startLocationAwareService() {
+    // TODO: 11/10/17 start service
+  }
+
+  @Override public void startResolutionForLocation(ResolvableApiException resolvable) {
+    try {
+      resolvable.startResolutionForResult((Activity) context, REQUEST_CHECK_SETTINGS);
+    } catch (IntentSender.SendIntentException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override public void showError(String message) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
   }
 
   @Override public void getLocationDropMarker() {

@@ -1,6 +1,10 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.content.Context;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
@@ -20,7 +24,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   }
 
   @Override public void onLocationPermissionGranted() {
-    locationProvider.getLocation(location -> getView().updateCurrentLocation(location));
+    locationProvider.getLastLocation(location -> getView().updateCurrentLocation(location));
   }
 
   @Override public void onLocationPinClicked() {
@@ -36,7 +40,18 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     getCheckPointDataSource().insertNewCheckPoint(checkPoint)
         .subscribeWith(new DisposableSingleObserver<Boolean>() {
           @Override public void onSuccess(Boolean aBoolean) {
-
+            locationProvider.setUpLocationRequest(
+                settingsResponse -> getView().startLocationAwareService(), e -> {
+                  int statusCode = ((ApiException) e).getStatusCode();
+                  switch (statusCode) {
+                    case CommonStatusCodes.RESOLUTION_REQUIRED:
+                      getView().startResolutionForLocation((ResolvableApiException) e);
+                      break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                      getView().showError("Message");
+                      break;
+                  }
+                });
           }
 
           @Override public void onError(Throwable e) {
