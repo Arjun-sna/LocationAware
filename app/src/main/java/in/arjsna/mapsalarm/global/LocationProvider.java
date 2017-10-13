@@ -1,7 +1,6 @@
 package in.arjsna.mapsalarm.global;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -12,16 +11,13 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
-import in.arjsna.mapsalarm.di.qualifiers.ApplicationContext;
-import javax.inject.Inject;
 
 public class LocationProvider {
   private static final int REQUEST_CHECK_SETTINGS = 1;
   private final Context context;
   private FusedLocationProviderClient locationProviderClient;
 
-  @Inject public LocationProvider(@ApplicationContext Context context) {
+  public LocationProvider(Context context) {
     this.context = context;
     locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
   }
@@ -29,7 +25,7 @@ public class LocationProvider {
   @SuppressLint("MissingPermission")
   public void getLastLocation(AppLocationListener appLocationListener) {
     locationProviderClient.getLastLocation()
-        .addOnSuccessListener((Activity) context, appLocationListener::onLocationAvailable);
+        .addOnSuccessListener(appLocationListener::onLocationAvailable);
   }
 
   public void setUpLocationRequest(OnSuccessListener<LocationSettingsResponse> successListener,

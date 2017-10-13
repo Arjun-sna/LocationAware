@@ -15,7 +15,7 @@ import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.locationalarm.LocationAlarmActivity;
 import javax.inject.Inject;
 
-public class LocationAwareService extends Service{
+public class LocationAwareService extends Service {
   private static final int NOTIFY_ID = 100;
 
   @Inject
@@ -40,7 +40,7 @@ public class LocationAwareService extends Service{
   }
 
   private void startListeningForLocationUpdates() {
-
+    //locationProvider.
   }
 
   private Notification createNotification() {

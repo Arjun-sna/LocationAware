@@ -16,11 +16,16 @@ import javax.inject.Singleton;
     this.application = application;
   }
 
-  @Provides @Singleton @ApplicationContext Context provideApplicationContext() {
+  @Provides
+  @Singleton
+  @ApplicationContext
+  Context provideApplicationContext() {
     return application.getApplicationContext();
   }
 
-  @Singleton @Provides CheckPointDataSource provideCheckPointDataSource(@ApplicationContext Context context) {
+  @Singleton
+  @Provides
+  CheckPointDataSource provideCheckPointDataSource(@ApplicationContext Context context) {
     return AppDataBase.getInstance(context).getCheckPointDataSource();
   }
 }
