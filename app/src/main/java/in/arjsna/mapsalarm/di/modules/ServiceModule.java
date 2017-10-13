@@ -7,6 +7,7 @@ import dagger.Provides;
 import in.arjsna.mapsalarm.di.qualifiers.ServiceContext;
 import in.arjsna.mapsalarm.di.scopes.ServiceScope;
 import in.arjsna.mapsalarm.global.LocationProvider;
+import io.reactivex.disposables.CompositeDisposable;
 
 @Module
 public class ServiceModule {
@@ -27,5 +28,11 @@ public class ServiceModule {
   @Provides
   LocationProvider provideLocationProvider(@ServiceContext Context context) {
     return new LocationProvider(context);
+  }
+
+  @ServiceScope
+  @Provides
+  CompositeDisposable provideCompositeDisposable() {
+    return new CompositeDisposable();
   }
 }
