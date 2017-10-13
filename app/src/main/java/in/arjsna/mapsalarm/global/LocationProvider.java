@@ -2,7 +2,9 @@ package in.arjsna.mapsalarm.global;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -30,10 +32,7 @@ public class LocationProvider {
 
   public void setUpLocationRequest(OnSuccessListener<LocationSettingsResponse> successListener,
       OnFailureListener onFailureListener) {
-    LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(2 * 60 * 1000);
-    locationRequest.setFastestInterval(60000);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    LocationRequest locationRequest = getLocationRequest();
     LocationSettingsRequest.Builder builder =
         new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
     SettingsClient settingsClient = LocationServices.getSettingsClient(context);
@@ -43,5 +42,22 @@ public class LocationProvider {
     locationSettingsResponseTask.addOnSuccessListener(successListener);
 
     locationSettingsResponseTask.addOnFailureListener(onFailureListener);
+  }
+
+  @NonNull private LocationRequest getLocationRequest() {
+    LocationRequest locationRequest = new LocationRequest();
+    locationRequest.setInterval(2 * 60 * 1000);
+    locationRequest.setFastestInterval(60000);
+    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    return locationRequest;
+  }
+
+  @SuppressLint("MissingPermission")
+  public void startLocationUpdates(LocationCallback locationCallback) {
+    locationProviderClient.requestLocationUpdates(getLocationRequest(), locationCallback, null);
+  }
+
+  public void stopLocationUpdates(LocationCallback locationCallback) {
+    locationProviderClient.removeLocationUpdates(locationCallback);
   }
 }
