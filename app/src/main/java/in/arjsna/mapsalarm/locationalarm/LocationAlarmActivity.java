@@ -3,6 +3,7 @@ package in.arjsna.mapsalarm.locationalarm;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jakewharton.rxbinding2.view.RxView;
 import in.arjsna.mapsalarm.R;
+import in.arjsna.mapsalarm.bgservice.LocationAwareService;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
@@ -100,7 +102,8 @@ public class LocationAlarmActivity extends BaseActivity
   }
 
   @Override public void startLocationAwareService() {
-    // TODO: 11/10/17 start service
+    Intent serviceIntent = new Intent(context, LocationAwareService.class);
+    startService(serviceIntent);
   }
 
   @Override public void startResolutionForLocation(ResolvableApiException resolvable) {

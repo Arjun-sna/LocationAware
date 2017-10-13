@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
+import in.arjsna.mapsalarm.di.qualifiers.ApplicationContext;
 import javax.inject.Inject;
 
 public class LocationProvider {
@@ -20,7 +21,7 @@ public class LocationProvider {
   private final Context context;
   private FusedLocationProviderClient locationProviderClient;
 
-  @Inject public LocationProvider(@ActivityContext Context context) {
+  @Inject public LocationProvider(@ApplicationContext Context context) {
     this.context = context;
     locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
   }

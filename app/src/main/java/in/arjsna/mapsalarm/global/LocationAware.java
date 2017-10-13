@@ -15,7 +15,7 @@ public class LocationAware extends Application {
             .build();
   }
 
-  public DaggerApplicationComponent getDaggerApplicationComponent() {
+  public DaggerApplicationComponent getApplicationComponent() {
     return daggerApplicationComponent;
   }
 }

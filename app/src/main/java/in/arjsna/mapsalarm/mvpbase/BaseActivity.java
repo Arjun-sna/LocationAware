@@ -13,7 +13,7 @@ public class BaseActivity extends AppCompatActivity {
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     daggerActivityComponent = (DaggerActivityComponent) DaggerActivityComponent.builder()
-        .applicationComponent(((LocationAware) getApplication()).getDaggerApplicationComponent())
+        .applicationComponent(((LocationAware) getApplication()).getApplicationComponent())
         .activityModule(new ActivityModule(this))
         .build();
   }
