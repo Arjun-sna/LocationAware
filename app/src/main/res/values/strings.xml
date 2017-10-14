@@ -1,11 +1,19 @@
 <resources>
   <string name="app_name">LocAware</string>
-  <string name="location_permission_denied">This Application requires location permission to be enabled.</string>
-  <string name="permission_required_toast">Location permission is required for this Application.</string>
-  <string name="permission_rationale_location">Access to the location service is required to get your location details.</string>
-  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDyZD25gUTa_BaDXmUpuqQuWWHTUI7snjQ</string>
+  <string name="location_permission_denied">This Application requires location permission to be
+    enabled.
+  </string>
+  <string name="permission_required_toast">Location permission is required for this Application.
+  </string>
+  <string name="permission_rationale_location">Access to the location service is required to get
+    your location details.
+  </string>
+  <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+    AIzaSyDyZD25gUTa_BaDXmUpuqQuWWHTUI7snjQ
+  </string>
   <string name="title_activity_location_alarm">LocationAlarmActivity</string>
   <string name="done">Done</string>
   <string name="cancel">Cancel</string>
   <string name="check_point_name_hint">Enter a name for this check point</string>
+  <string name="title_activity_alarm">AlarmActivity</string>
 </resources>

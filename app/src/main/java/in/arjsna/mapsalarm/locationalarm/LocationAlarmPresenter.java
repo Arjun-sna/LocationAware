@@ -10,6 +10,7 @@ import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.mvpbase.BasePresenter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import javax.inject.Inject;
 
@@ -38,6 +39,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     checkPoint.setLatitude(latitude);
     checkPoint.setLongitude(longitude);
     getCheckPointDataSource().insertNewCheckPoint(checkPoint)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<Boolean>() {
           @Override public void onSuccess(Boolean aBoolean) {
             locationProvider.setUpLocationRequest(
@@ -48,14 +50,14 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
                       getView().startResolutionForLocation((ResolvableApiException) e);
                       break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                      getView().showError("Message");
+                      getView().showError("Location setting error");
                       break;
                   }
                 });
           }
 
           @Override public void onError(Throwable e) {
-
+            getView().showError("Failed to add alarm");
           }
         });
   }
