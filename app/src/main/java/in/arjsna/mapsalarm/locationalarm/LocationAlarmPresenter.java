@@ -10,7 +10,9 @@ import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.mvpbase.BasePresenter;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import javax.inject.Inject;
 
@@ -26,6 +28,27 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
 
   @Override public void onLocationPermissionGranted() {
     locationProvider.getLastLocation(location -> getView().updateCurrentLocation(location));
+    addCheckPointMarkers();
+  }
+
+  private void addCheckPointMarkers() {
+    getCheckPointDataSource().getAllCheckPoints()
+        .toObservable()
+        .flatMap(Observable::fromIterable)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new DisposableObserver<CheckPoint>() {
+          @Override public void onNext(CheckPoint checkPoint) {
+            getView().addMarkerOnMap(checkPoint);
+          }
+
+          @Override public void onError(Throwable e) {
+            getView().showError(e.getLocalizedMessage());
+          }
+
+          @Override public void onComplete() {
+
+          }
+        });
   }
 
   @Override public void onLocationPinClicked() {

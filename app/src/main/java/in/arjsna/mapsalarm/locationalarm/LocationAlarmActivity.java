@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.jakewharton.rxbinding2.view.RxView;
 import in.arjsna.mapsalarm.R;
 import in.arjsna.mapsalarm.bgservice.LocationAwareService;
+import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
@@ -197,5 +198,14 @@ public class LocationAlarmActivity extends BaseActivity
   @Override protected void onDestroy() {
     super.onDestroy();
     locationPresenter.onDetach();
+  }
+
+  @Override
+  public void addMarkerOnMap(CheckPoint checkPoint) {
+    mMap.addMarker(new MarkerOptions()
+        .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag))
+        .draggable(false)
+        .position(new LatLng(checkPoint.getLatitude(), checkPoint.getLongitude()))
+        .title(checkPoint.getName()));
   }
 }

@@ -2,6 +2,7 @@ package in.arjsna.mapsalarm.locationalarm;
 
 import android.location.Location;
 import com.google.android.gms.common.api.ResolvableApiException;
+import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.mvpbase.IMVPPresenter;
 import in.arjsna.mapsalarm.mvpbase.IMVPView;
 
@@ -19,6 +20,8 @@ public interface LocationAlarmMVPContract {
     void startResolutionForLocation(ResolvableApiException resolvable);
 
     void showError(String message);
+
+    void addMarkerOnMap(CheckPoint checkPoint);
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {
