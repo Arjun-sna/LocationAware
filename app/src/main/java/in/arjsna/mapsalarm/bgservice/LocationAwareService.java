@@ -37,6 +37,7 @@ import javax.inject.Inject;
 public class LocationAwareService extends Service {
   private static final int NOTIFY_ID = 100;
   public static final String LOCATION_REACHED = "LOCATION_REACHED";
+  public final static int MAX_DISTANCE_RANGE = 500;
   // Time period between two vibration events
   private final static int VIBRATE_DELAY_TIME = 2000;
   // Vibrate for 1000 milliseconds
@@ -93,7 +94,7 @@ public class LocationAwareService extends Service {
           float[] results = new float[3];
           Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
               checkPoint.getLatitude(), checkPoint.getLongitude(), results);
-          return results[0] < 500;
+          return results[0] < MAX_DISTANCE_RANGE;
         })
         .doOnNext(checkPoint -> checkPointDataSource.deleteCheckPoint(checkPoint).subscribe())
         .subscribeOn(Schedulers.io())
@@ -109,7 +110,7 @@ public class LocationAwareService extends Service {
           }
 
           @Override public void onComplete() {
-
+            //// TODO: 15/10/17 schedule next job
           }
         }));
   }

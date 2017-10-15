@@ -1,10 +1,12 @@
 package in.arjsna.mapsalarm.locationalarm;
 
 import android.content.Context;
+import android.location.Location;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import in.arjsna.mapsalarm.bgservice.LocationAwareService;
 import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
@@ -63,6 +65,19 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     checkPoint.setName(checkpointName);
     checkPoint.setLatitude(latitude);
     checkPoint.setLongitude(longitude);
+    locationProvider.getLastLocation(location -> {
+      float[] results = new float[3];
+      Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+          checkPoint.getLatitude(), checkPoint.getLongitude(), results);
+      if (results[0] < LocationAwareService.MAX_DISTANCE_RANGE) {
+        getView().showError("You are already near to the location specified");
+      } else {
+        insertCheckPoint(checkPoint);
+      }
+    });
+  }
+
+  private void insertCheckPoint(CheckPoint checkPoint) {
     getCheckPointDataSource().insertNewCheckPoint(checkPoint)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
