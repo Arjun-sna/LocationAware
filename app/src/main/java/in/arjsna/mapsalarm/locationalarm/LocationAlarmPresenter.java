@@ -65,6 +65,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<Boolean>() {
           @Override public void onSuccess(Boolean aBoolean) {
+            getView().addMarkerOnMap(checkPoint);
             locationProvider.setUpLocationRequest(
                 settingsResponse -> getView().startLocationAwareService(), e -> {
                   int statusCode = ((ApiException) e).getStatusCode();
