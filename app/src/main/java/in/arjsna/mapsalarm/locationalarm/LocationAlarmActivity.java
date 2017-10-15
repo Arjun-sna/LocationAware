@@ -58,7 +58,12 @@ public class LocationAlarmActivity extends BaseActivity
       getActivityComponent().inject(this);
       locationPresenter.onAttach(this);
     }
+    processIntent();
     initView();
+  }
+
+  private void processIntent() {
+    getIntent().getAction();
   }
 
   private void initView() {
@@ -72,9 +77,7 @@ public class LocationAlarmActivity extends BaseActivity
   }
 
   private void bindEvents() {
-    locationPin.setOnClickListener(v -> {
-      locationPresenter.onLocationPinClicked();
-    });
+    locationPin.setOnClickListener(v -> locationPresenter.onLocationPinClicked());
   }
 
   @Override public void showAddCheckPointDialog() {
@@ -97,9 +100,8 @@ public class LocationAlarmActivity extends BaseActivity
         nameEditText.setError("Name should have minimum of 4 characters.");
       }
     });
-    RxView.clicks(dialogView.findViewById(R.id.set_checkpoint_cancel_btn)).subscribe(__ -> {
-      alertDialog.dismiss();
-    });
+    RxView.clicks(dialogView.findViewById(R.id.set_checkpoint_cancel_btn))
+        .subscribe(__ -> alertDialog.dismiss());
   }
 
   @Override public void startLocationAwareService() {

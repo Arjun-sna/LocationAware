@@ -16,4 +16,6 @@
   <string name="cancel">Cancel</string>
   <string name="check_point_name_hint">Enter a name for this check point</string>
   <string name="title_activity_alarm">AlarmActivity</string>
+  <string name="location_reached">Location Reached</string>
+  <string name="dismiss">Dismiss</string>
 </resources>
