@@ -1,18 +1,15 @@
 package in.arjsna.mapsalarm.bgservice;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -104,7 +101,6 @@ public class LocationAwareService extends Service {
             Log.i("Debug ", "Location reached");
             openActivity();
             startPlayer();
-            // TODO: 13/10/17 start ringing
           }
 
           @Override public void onError(Throwable e) {
@@ -118,12 +114,18 @@ public class LocationAwareService extends Service {
   }
 
   private MediaPlayer.OnErrorListener mErrorListener = (mp, what, extra) -> {
-    mp.stop();
-    mp.release();
-    mHandler.removeCallbacksAndMessages(null);
+    stopPlayer();
     LocationAwareService.this.stopSelf();
     return true;
   };
+
+  private void stopPlayer() {
+    if (mPlayer != null) {
+      mPlayer.stop();
+      mPlayer.release();
+      mHandler.removeCallbacksAndMessages(null);
+    }
+  }
 
   private Runnable mVibrationRunnable = new Runnable() {
     @Override
@@ -164,7 +166,7 @@ public class LocationAwareService extends Service {
       //    && ringtone.startsWith("content://media/external/")
       //    && checkSelfPermission(
       //    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-        ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
+      ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
       //}
       mPlayer.setDataSource(this, Uri.parse(ringtone));
       mPlayer.setLooping(true);
@@ -176,7 +178,7 @@ public class LocationAwareService extends Service {
       //if (App.getState().settings().ramping()) {
       //  mHandler.postDelayed(mVolumeRunnable, VOLUME_INCREASE_DELAY);
       //} else {
-        mPlayer.setVolume(MAX_VOLUME, MAX_VOLUME);
+      mPlayer.setVolume(MAX_VOLUME, MAX_VOLUME);
       //}
     } catch (Exception e) {
       if (mPlayer.isPlaying()) {
@@ -221,6 +223,7 @@ public class LocationAwareService extends Service {
 
   @Override public void onDestroy() {
     super.onDestroy();
+    stopPlayer();
     compositeDisposable.dispose();
     locationProvider.stopLocationUpdates(locationCallback);
   }

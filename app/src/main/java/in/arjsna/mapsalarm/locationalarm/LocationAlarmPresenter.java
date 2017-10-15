@@ -84,4 +84,13 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
           }
         });
   }
+
+  @Override public void onLocationReached() {
+    getView().showAlarmLayout();
+  }
+
+  @Override public void dismissBtnClicked() {
+    getView().hideAlarmLayout();
+    getView().stopRinging();
+  }
 }

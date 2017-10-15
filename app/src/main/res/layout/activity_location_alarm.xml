@@ -48,6 +48,8 @@
     />
   </FrameLayout>
   <android.support.v7.widget.CardView
+      android:visibility="gone"
+      android:id="@+id/alarm_view_layout"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_margin="10dp"

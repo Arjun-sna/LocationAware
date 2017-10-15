@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +51,8 @@ public class LocationAlarmActivity extends BaseActivity
       locationPresenter;
   @Inject @ActivityContext public Context context;
   private Location currentLocation;
+  private CardView locationAlarmLayout;
+  private TextView dismissAlarmBtn;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -58,18 +61,23 @@ public class LocationAlarmActivity extends BaseActivity
       getActivityComponent().inject(this);
       locationPresenter.onAttach(this);
     }
-    processIntent();
     initView();
+    processIntent();
   }
 
   private void processIntent() {
-    getIntent().getAction();
+    String action = getIntent().getAction();
+    if (action != null && action.equals(LocationAwareService.LOCATION_REACHED)) {
+      locationPresenter.onLocationReached();
+    }
   }
 
   private void initView() {
     //Toolbar toolbar = findViewById(R.id.toolbar);
     //setSupportActionBar(toolbar);
     locationPin = findViewById(R.id.location_pin);
+    locationAlarmLayout = findViewById(R.id.alarm_view_layout);
+    dismissAlarmBtn = findViewById(R.id.dismiss_btn);
     SupportMapFragment supportMapFragment =
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     supportMapFragment.getMapAsync(this);
@@ -78,6 +86,7 @@ public class LocationAlarmActivity extends BaseActivity
 
   private void bindEvents() {
     locationPin.setOnClickListener(v -> locationPresenter.onLocationPinClicked());
+    dismissAlarmBtn.setOnClickListener(v -> locationPresenter.dismissBtnClicked());
   }
 
   @Override public void showAddCheckPointDialog() {
@@ -209,5 +218,18 @@ public class LocationAlarmActivity extends BaseActivity
         .draggable(false)
         .position(new LatLng(checkPoint.getLatitude(), checkPoint.getLongitude()))
         .title(checkPoint.getName()));
+  }
+
+  @Override public void showAlarmLayout() {
+    locationAlarmLayout.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideAlarmLayout() {
+    locationAlarmLayout.setVisibility(View.GONE);
+  }
+
+  @Override public void stopRinging() {
+    Intent stopIntent = new Intent(LocationAlarmActivity.this, LocationAwareService.class);
+    stopService(stopIntent);
   }
 }
