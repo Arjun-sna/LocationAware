@@ -17,4 +17,6 @@ public interface ApplicationComponent {
   @ApplicationContext Context getContext();
 
   CheckPointDataSource getCheckPointDataSource();
+
+  LocationProvider getLocationProvider();
 }

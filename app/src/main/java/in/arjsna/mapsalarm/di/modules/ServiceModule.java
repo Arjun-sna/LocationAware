@@ -26,12 +26,6 @@ public class ServiceModule {
 
   @ServiceScope
   @Provides
-  LocationProvider provideLocationProvider(@ServiceContext Context context) {
-    return new LocationProvider(context);
-  }
-
-  @ServiceScope
-  @Provides
   CompositeDisposable provideCompositeDisposable() {
     return new CompositeDisposable();
   }

@@ -30,10 +30,4 @@ import in.arjsna.mapsalarm.locationalarm.LocationAlarmPresenter;
       LocationAlarmPresenter<LocationAlarmMVPContract.ILocationAlarmView> locationAlarmPresenter) {
     return locationAlarmPresenter;
   }
-
-  @ActivityScope
-  @Provides
-  LocationProvider provideLocationProvider(@ActivityContext Context context) {
-    return new LocationProvider(context);
-  }
 }
