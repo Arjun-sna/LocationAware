@@ -49,6 +49,7 @@ public class LocationAwareService extends Service {
   private final static float VOLUME_INCREASE_STEP = 0.01f;
   // Max player volume level
   private final static float MAX_VOLUME = 1.0f;
+  public static final String CURRENT_CHECKPOINT = "current_checkpoint";
 
   @Inject
   public LocationProvider locationProvider;
@@ -62,6 +63,7 @@ public class LocationAwareService extends Service {
   private Vibrator mVibrator;
   private float mVolumeLevel = 0;
   private Handler mHandler = new Handler();
+  private boolean isAlarmRinging = false;
 
   @Override public void onCreate() {
     super.onCreate();
@@ -102,8 +104,10 @@ public class LocationAwareService extends Service {
         .subscribeWith(new DisposableObserver<CheckPoint>() {
           @Override public void onNext(CheckPoint checkPoint) {
             Log.i("Debug ", "Location reached");
-            openActivity();
-            startPlayer();
+            if (!isAlarmRinging) {
+              openActivity(checkPoint);
+              startPlayer();
+            }
           }
 
           @Override public void onError(Throwable e) {
@@ -123,6 +127,7 @@ public class LocationAwareService extends Service {
   };
 
   private void stopPlayer() {
+    isAlarmRinging = false;
     if (mPlayer != null) {
       mPlayer.stop();
       mPlayer.release();
@@ -158,6 +163,7 @@ public class LocationAwareService extends Service {
     mPlayer.setOnErrorListener(mErrorListener);
 
     try {
+      isAlarmRinging = true;
       // add vibration to alarm alert if it is set
       //if (App.getState().settings().vibrate()) {
       mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -184,6 +190,7 @@ public class LocationAwareService extends Service {
       mPlayer.setVolume(MAX_VOLUME, MAX_VOLUME);
       //}
     } catch (Exception e) {
+      isAlarmRinging = false;
       if (mPlayer.isPlaying()) {
         mPlayer.stop();
       }
@@ -191,10 +198,11 @@ public class LocationAwareService extends Service {
     }
   }
 
-  private void openActivity() {
+  private void openActivity(CheckPoint checkPoint) {
     Intent myIntent = new Intent(getApplicationContext(), AlarmActivity.class);
     myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
     myIntent.setAction(LOCATION_REACHED);
+    myIntent.putExtra(CURRENT_CHECKPOINT, checkPoint);
     startActivity(myIntent);
   }
 
