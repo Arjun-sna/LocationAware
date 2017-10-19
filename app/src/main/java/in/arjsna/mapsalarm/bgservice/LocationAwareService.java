@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import in.arjsna.mapsalarm.R;
+import in.arjsna.mapsalarm.alarm.AlarmActivity;
 import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.components.DaggerServiceComponent;
@@ -191,9 +192,10 @@ public class LocationAwareService extends Service {
   }
 
   private void openActivity() {
-    Intent myIntent = new Intent(getApplicationContext(), LocationAlarmActivity.class);
+    Intent myIntent = new Intent(getApplicationContext(), AlarmActivity.class);
     myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
     myIntent.setAction(LOCATION_REACHED);
+    System.out.println("Action Set");
     startActivity(myIntent);
   }
 

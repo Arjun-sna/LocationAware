@@ -3,8 +3,9 @@
     package="in.arjsna.mapsalarm">
 
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.VIBRATE"/>
+
   <application
       android:name=".global.LocationAware"
       android:allowBackup="true"
@@ -40,7 +41,7 @@
         android:exported="false"/>
 
     <activity
-        android:name=".AlarmActivity"
+        android:name=".alarm.AlarmActivity"
         android:label="@string/title_activity_alarm">
     </activity>
   </application>

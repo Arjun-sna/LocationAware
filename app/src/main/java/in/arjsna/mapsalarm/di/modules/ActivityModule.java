@@ -4,9 +4,10 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import dagger.Module;
 import dagger.Provides;
+import in.arjsna.mapsalarm.alarm.AlarmMVPContract;
+import in.arjsna.mapsalarm.alarm.AlarmPresenter;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.di.scopes.ActivityScope;
-import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.locationalarm.LocationAlarmMVPContract;
 import in.arjsna.mapsalarm.locationalarm.LocationAlarmPresenter;
 
@@ -29,5 +30,12 @@ import in.arjsna.mapsalarm.locationalarm.LocationAlarmPresenter;
   LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView> provideLocationPresenter(
       LocationAlarmPresenter<LocationAlarmMVPContract.ILocationAlarmView> locationAlarmPresenter) {
     return locationAlarmPresenter;
+  }
+
+  @ActivityScope
+  @Provides
+  AlarmMVPContract.IAlarmPresenter<AlarmMVPContract.IAlarmView> provideAlarmPresenter(
+      AlarmPresenter<AlarmMVPContract.IAlarmView> alarmPresenter) {
+    return alarmPresenter;
   }
 }

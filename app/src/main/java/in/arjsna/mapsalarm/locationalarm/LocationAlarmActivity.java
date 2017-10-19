@@ -62,7 +62,6 @@ public class LocationAlarmActivity extends BaseActivity
       locationPresenter.onAttach(this);
     }
     initView();
-    processIntent();
   }
 
   private void processIntent() {
@@ -71,6 +70,11 @@ public class LocationAlarmActivity extends BaseActivity
     if (action != null && action.equals(LocationAwareService.LOCATION_REACHED)) {
       locationPresenter.onLocationReached();
     }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    processIntent();
   }
 
   private void initView() {
