@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.Task;
 
 public class LocationProvider {
   private static final int REQUEST_CHECK_SETTINGS = 1;
+  private static final int LOCATION_UPDATE_INTERVAL = 15 * 1000;
+  private static final int LOCATION_UPDATE_FASTEST_INTERVAL = 10 * 1000;
   private final Context context;
   private FusedLocationProviderClient locationProviderClient;
 
@@ -46,8 +48,8 @@ public class LocationProvider {
 
   @NonNull private LocationRequest getLocationRequest() {
     LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(2 * 60 * 1000);
-    locationRequest.setFastestInterval(60000);
+    locationRequest.setInterval(LOCATION_UPDATE_INTERVAL);
+    locationRequest.setFastestInterval(LOCATION_UPDATE_FASTEST_INTERVAL);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     return locationRequest;
   }

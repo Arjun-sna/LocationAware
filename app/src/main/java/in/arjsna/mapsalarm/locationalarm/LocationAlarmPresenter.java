@@ -14,6 +14,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocationAlarmView>
@@ -35,6 +36,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     getCheckPointDataSource().getAllCheckPoints()
         .toObservable()
         .flatMap(Observable::fromIterable)
+        .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableObserver<CheckPoint>() {
           @Override public void onNext(CheckPoint checkPoint) {
@@ -62,6 +64,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     checkPoint.setLatitude(latitude);
     checkPoint.setLongitude(longitude);
     getCheckPointDataSource().insertNewCheckPoint(checkPoint)
+        .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<Boolean>() {
           @Override public void onSuccess(Boolean aBoolean) {

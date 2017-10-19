@@ -1,7 +1,6 @@
 package in.arjsna.mapsalarm.db;
 
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 public class CheckPointDataSource {
@@ -12,12 +11,14 @@ public class CheckPointDataSource {
   }
 
   public Single<List<CheckPoint>> getAllCheckPoints() {
-    return Single.fromCallable(checkPointDao::getAllCheckPoints)
-        .subscribeOn(Schedulers.io());
+    return Single.fromCallable(checkPointDao::getAllCheckPoints);
   }
 
   public Single<Boolean> insertNewCheckPoint(CheckPoint checkPoint) {
-    return Single.fromCallable(() -> checkPointDao.insertNewCheckPoint(checkPoint) > 1)
-        .subscribeOn(Schedulers.io());
+    return Single.fromCallable(() -> checkPointDao.insertNewCheckPoint(checkPoint) > 1);
+  }
+
+  public Single<Boolean> deleteCheckPoint(CheckPoint checkPoint) {
+    return Single.fromCallable(() -> checkPointDao.deleteCheckPoint(checkPoint) > 1);
   }
 }

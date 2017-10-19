@@ -67,6 +67,7 @@ public class LocationAlarmActivity extends BaseActivity
 
   private void processIntent() {
     String action = getIntent().getAction();
+    System.out.println("Action " + action);
     if (action != null && action.equals(LocationAwareService.LOCATION_REACHED)) {
       locationPresenter.onLocationReached();
     }

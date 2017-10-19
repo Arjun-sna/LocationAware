@@ -95,6 +95,7 @@ public class LocationAwareService extends Service {
               checkPoint.getLatitude(), checkPoint.getLongitude(), results);
           return results[0] < 500;
         })
+        .doOnNext(checkPoint -> checkPointDataSource.deleteCheckPoint(checkPoint).subscribe())
         .subscribeOn(Schedulers.io())
         .subscribeWith(new DisposableObserver<CheckPoint>() {
           @Override public void onNext(CheckPoint checkPoint) {
