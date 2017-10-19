@@ -22,12 +22,6 @@ public interface LocationAlarmMVPContract {
     void showError(String message);
 
     void addMarkerOnMap(CheckPoint checkPoint);
-
-    void showAlarmLayout();
-
-    void hideAlarmLayout();
-
-    void stopRinging();
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {
@@ -37,9 +31,5 @@ public interface LocationAlarmMVPContract {
     void onLocationPinClicked();
 
     void onSetCheckPoint(String checkpointName, double latitude, double longitude);
-
-    void onLocationReached();
-
-    void dismissBtnClicked();
   }
 }

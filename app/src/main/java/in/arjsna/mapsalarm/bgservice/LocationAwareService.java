@@ -195,7 +195,6 @@ public class LocationAwareService extends Service {
     Intent myIntent = new Intent(getApplicationContext(), AlarmActivity.class);
     myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
     myIntent.setAction(LOCATION_REACHED);
-    System.out.println("Action Set");
     startActivity(myIntent);
   }
 
