@@ -30,7 +30,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   }
 
   @Override public void onLocationPermissionGranted() {
-    locationProvider.getLastLocation(location -> getView().updateCurrentLocation(location));
+    updateCurrentLocation();
     addCheckPointMarkers();
   }
 
@@ -75,6 +75,14 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
         insertCheckPoint(checkPoint);
       }
     });
+  }
+
+  @Override public void onMyLocationBtnClicked() {
+    updateCurrentLocation();
+  }
+
+  private void updateCurrentLocation() {
+    locationProvider.getLastLocation(location -> getView().updateCurrentLocation(location));
   }
 
   private void insertCheckPoint(CheckPoint checkPoint) {

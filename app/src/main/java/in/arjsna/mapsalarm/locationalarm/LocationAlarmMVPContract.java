@@ -31,5 +31,7 @@ public interface LocationAlarmMVPContract {
     void onLocationPinClicked();
 
     void onSetCheckPoint(String checkpointName, double latitude, double longitude);
+
+    void onMyLocationBtnClicked();
   }
 }

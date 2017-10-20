@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
   private LocationManager locationManager;
-  private FrameLayout mMapHolderLayout;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -45,16 +44,11 @@ public class MainActivity extends AppCompatActivity
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     supportMapFragment.getMapAsync(this);
     locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    mMapHolderLayout = findViewById(R.id.map_holder_layout);
     bindEvents();
   }
 
   private void bindEvents() {
-    mMapHolderLayout.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View v, MotionEvent event) {
-        return false;
-      }
-    });
+    // TODO: 20/10/17 bindevents
   }
 
   private void getPermissionAndEnableLocation() {
