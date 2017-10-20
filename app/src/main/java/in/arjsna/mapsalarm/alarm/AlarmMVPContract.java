@@ -12,6 +12,8 @@ public interface AlarmMVPContract {
     void loadMap();
 
     void setMarkerOnMap(CheckPoint checkPoint);
+
+    void setCheckPointName(String name);
   }
 
   interface IAlarmPresenter<V extends IAlarmView> extends IMVPPresenter<V> {

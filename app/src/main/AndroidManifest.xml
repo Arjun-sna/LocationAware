@@ -3,7 +3,7 @@
     package="in.arjsna.mapsalarm">
 
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
 
   <application
@@ -28,7 +28,8 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/google_maps_key"/>
 
-    <activity android:name=".locationalarm.LocationAlarmActivity">
+    <activity android:name=".locationalarm.LocationAlarmActivity"
+        android:launchMode="singleTop">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 

@@ -32,5 +32,6 @@ public class AlarmPresenter<V extends AlarmMVPContract.IAlarmView> extends BaseP
 
   @Override public void onMapReady() {
     getView().setMarkerOnMap(checkPoint);
+    getView().setCheckPointName(checkPoint.getName());
   }
 }
