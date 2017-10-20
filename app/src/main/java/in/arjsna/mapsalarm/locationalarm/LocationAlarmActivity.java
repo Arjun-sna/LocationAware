@@ -42,6 +42,7 @@ public class LocationAlarmActivity extends BaseActivity
     LocationAlarmMVPContract.ILocationAlarmView {
   private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
   private static final int REQUEST_CHECK_SETTINGS = 2;
+  private static double LATITUDE_PAN = 0;
 
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
@@ -93,6 +94,21 @@ public class LocationAlarmActivity extends BaseActivity
     locationPin.setOnClickListener(v -> locationPresenter.onLocationPinClicked());
     currentLocationBtn.setOnClickListener(v -> locationPresenter.onMyLocationBtnClicked());
     checkPointsListBtn.setOnClickListener(v -> locationPresenter.onCheckPointListBtnClicked());
+    mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+      @Override public void onStateChanged(@NonNull View bottomSheet, int newState) {
+        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+          locationPin.setVisibility(View.GONE);
+          LATITUDE_PAN = 0.005;
+        } else {
+          locationPin.setVisibility(View.VISIBLE);
+          LATITUDE_PAN = 0;
+        }
+      }
+
+      @Override public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+      }
+    });
   }
 
   @Override public void showAddCheckPointDialog() {
@@ -183,7 +199,7 @@ public class LocationAlarmActivity extends BaseActivity
 
   @Override public void updateCurrentLocation(double latitude, double longitude) {
     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-        new LatLng(latitude, longitude), 15), 10, null);
+        new LatLng(latitude - LATITUDE_PAN, longitude), 15), 1000, null);
   }
 
   @Override protected void onDestroy() {
