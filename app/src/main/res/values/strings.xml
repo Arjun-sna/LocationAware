@@ -18,4 +18,5 @@
   <string name="title_activity_alarm">AlarmActivity</string>
   <string name="location_reached">Location Reached</string>
   <string name="dismiss">Dismiss</string>
+  <string name="all_check_points">All CheckPoints</string>
 </resources>

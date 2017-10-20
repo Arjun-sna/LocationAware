@@ -17,11 +17,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocationAlarmView>
     extends BasePresenter<V> implements LocationAlarmMVPContract.ILocationPresenter<V> {
-
+  private ArrayList<CheckPoint> allCheckPoints;
   @Inject LocationProvider locationProvider;
 
   @Inject public LocationAlarmPresenter(@ActivityContext Context context,
@@ -37,6 +38,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   private void addCheckPointMarkers() {
     getCheckPointDataSource().getAllCheckPoints()
         .toObservable()
+        .doOnNext(checkPoints -> allCheckPoints = (ArrayList<CheckPoint>) checkPoints)
         .flatMap(Observable::fromIterable)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -50,7 +52,7 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
           }
 
           @Override public void onComplete() {
-
+            getView().notifyListAdapter();
           }
         });
   }
@@ -81,8 +83,35 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     updateCurrentLocation();
   }
 
+  @Override public void onCheckPointListBtnClicked() {
+    getView().showBottomSheet();
+  }
+
+  @Override public int getCheckPointsCount() {
+    return allCheckPoints != null ? allCheckPoints.size() : 0;
+  }
+
+  @Override public CheckPoint getCheckPointAt(int position) {
+    return allCheckPoints != null ? allCheckPoints.get(position) : null;
+  }
+
+  @Override public void onCheckPointItemClicked(int adapterPosition) {
+    CheckPoint checkPoint = allCheckPoints.get(adapterPosition);
+    getView().updateCurrentLocation(checkPoint.getLatitude(), checkPoint.getLongitude());
+  }
+
+  @Override public void onDeleteCheckPoint(int adapterPosition) {
+    // TODO: 20/10/17 delete
+  }
+
+  @Override public void onEditCheckPoint(int adapterPosition) {
+    // TODO: 20/10/17 edit
+  }
+
   private void updateCurrentLocation() {
-    locationProvider.getLastLocation(location -> getView().updateCurrentLocation(location));
+    locationProvider.getLastLocation(
+        location -> getView().updateCurrentLocation(location.getLatitude(),
+            location.getLongitude()));
   }
 
   private void insertCheckPoint(CheckPoint checkPoint) {
@@ -91,7 +120,9 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeWith(new DisposableSingleObserver<Boolean>() {
           @Override public void onSuccess(Boolean aBoolean) {
+            allCheckPoints.add(checkPoint);
             getView().addMarkerOnMap(checkPoint);
+            getView().notifyListAdapter();
             locationProvider.setUpLocationRequest(
                 settingsResponse -> getView().startLocationAwareService(), e -> {
                   int statusCode = ((ApiException) e).getStatusCode();

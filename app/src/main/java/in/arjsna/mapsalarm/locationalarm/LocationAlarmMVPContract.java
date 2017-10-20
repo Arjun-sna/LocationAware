@@ -9,9 +9,7 @@ import in.arjsna.mapsalarm.mvpbase.IMVPView;
 public interface LocationAlarmMVPContract {
   interface ILocationAlarmView extends IMVPView {
 
-    void updateCurrentLocation(Location location);
-
-    void getLocationDropMarker();
+    void updateCurrentLocation(double latitude, double longitude);
 
     void showAddCheckPointDialog();
 
@@ -22,6 +20,10 @@ public interface LocationAlarmMVPContract {
     void showError(String message);
 
     void addMarkerOnMap(CheckPoint checkPoint);
+
+    void showBottomSheet();
+
+    void notifyListAdapter();
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {
@@ -33,5 +35,17 @@ public interface LocationAlarmMVPContract {
     void onSetCheckPoint(String checkpointName, double latitude, double longitude);
 
     void onMyLocationBtnClicked();
+
+    void onCheckPointListBtnClicked();
+
+    int getCheckPointsCount();
+
+    CheckPoint getCheckPointAt(int position);
+
+    void onCheckPointItemClicked(int adapterPosition);
+
+    void onDeleteCheckPoint(int adapterPosition);
+
+    void onEditCheckPoint(int adapterPosition);
   }
 }

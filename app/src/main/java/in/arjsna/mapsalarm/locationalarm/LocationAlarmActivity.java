@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,7 +26,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -47,13 +48,17 @@ public class LocationAlarmActivity extends BaseActivity
   private ImageView locationPin;
 
   @Inject
+  public CheckPointsAdapter checkPointsAdapter;
+
+  @Inject
   public LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
       locationPresenter;
   @Inject
   @ActivityContext
   public Context context;
-  private Location currentLocation;
   private FloatingActionButton currentLocationBtn;
+  private FloatingActionButton checkPointsListBtn;
+  private BottomSheetBehavior mBottomSheetBehavior;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -66,10 +71,18 @@ public class LocationAlarmActivity extends BaseActivity
   }
 
   private void initView() {
-    //Toolbar toolbar = findViewById(R.id.toolbar);
-    //setSupportActionBar(toolbar);
     locationPin = findViewById(R.id.location_pin);
     currentLocationBtn = findViewById(R.id.my_location_btn);
+    checkPointsListBtn = findViewById(R.id.check_points_list_btn);
+    View bottomSheet = findViewById(R.id.bottom_sheet);
+    mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+    mBottomSheetBehavior.setHideable(true);
+    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+    RecyclerView checkPointsList = findViewById(R.id.check_point_list_view);
+    checkPointsList.setLayoutManager(new LinearLayoutManager(context));
+    checkPointsList.setAdapter(checkPointsAdapter);
+
     SupportMapFragment supportMapFragment =
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     supportMapFragment.getMapAsync(this);
@@ -79,6 +92,7 @@ public class LocationAlarmActivity extends BaseActivity
   private void bindEvents() {
     locationPin.setOnClickListener(v -> locationPresenter.onLocationPinClicked());
     currentLocationBtn.setOnClickListener(v -> locationPresenter.onMyLocationBtnClicked());
+    checkPointsListBtn.setOnClickListener(v -> locationPresenter.onCheckPointListBtnClicked());
   }
 
   @Override public void showAddCheckPointDialog() {
@@ -120,20 +134,6 @@ public class LocationAlarmActivity extends BaseActivity
 
   @Override public void showError(String message) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-  }
-
-  @Override public void getLocationDropMarker() {
-    LatLng target = mMap.getCameraPosition().target;
-    mMap.addMarker(
-        new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin))
-            .position(target)
-            .draggable(false));
-    mMap.addCircle(new CircleOptions().center(target).clickable(false).radius(200).strokeWidth(5));
-    float[] results = new float[2];
-
-    Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
-        target.latitude, target.longitude, results);
-    Toast.makeText(LocationAlarmActivity.this, " " + results[0] / 1000, Toast.LENGTH_SHORT).show();
   }
 
   private void getPermissionAndEnableLocation() {
@@ -181,10 +181,9 @@ public class LocationAlarmActivity extends BaseActivity
         .show(getSupportFragmentManager(), "dialog");
   }
 
-  @Override public void updateCurrentLocation(Location location) {
-    this.currentLocation = location;
+  @Override public void updateCurrentLocation(double latitude, double longitude) {
     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-        new LatLng(location.getLatitude(), location.getLongitude()), 15), 10, null);
+        new LatLng(latitude, longitude), 15), 10, null);
   }
 
   @Override protected void onDestroy() {
@@ -199,5 +198,18 @@ public class LocationAlarmActivity extends BaseActivity
         .draggable(false)
         .position(new LatLng(checkPoint.getLatitude(), checkPoint.getLongitude()))
         .title(checkPoint.getName()));
+  }
+
+  @Override
+  public void showBottomSheet() {
+    if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+      mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    } else {
+      mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+  }
+
+  @Override public void notifyListAdapter() {
+    checkPointsAdapter.notifyDataSetChanged();
   }
 }

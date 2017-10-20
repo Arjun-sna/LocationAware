@@ -2,6 +2,7 @@ package in.arjsna.mapsalarm.di.modules;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import dagger.Module;
 import dagger.Provides;
 import in.arjsna.mapsalarm.alarm.AlarmMVPContract;
@@ -37,5 +38,10 @@ import in.arjsna.mapsalarm.locationalarm.LocationAlarmPresenter;
   AlarmMVPContract.IAlarmPresenter<AlarmMVPContract.IAlarmView> provideAlarmPresenter(
       AlarmPresenter<AlarmMVPContract.IAlarmView> alarmPresenter) {
     return alarmPresenter;
+  }
+
+  @ActivityScope
+  @Provides LayoutInflater provideLayoutInflater(@ActivityContext Context context) {
+    return LayoutInflater.from(context);
   }
 }
