@@ -21,4 +21,8 @@ public class CheckPointDataSource {
   public Single<Boolean> deleteCheckPoint(CheckPoint checkPoint) {
     return Single.fromCallable(() -> checkPointDao.deleteCheckPoint(checkPoint) > 1);
   }
+
+  public Single<Integer> getCheckPointCount() {
+    return Single.fromCallable(checkPointDao::getCount);
+  }
 }

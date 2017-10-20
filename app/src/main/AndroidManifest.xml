@@ -5,6 +5,7 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
   <application
       android:name=".global.LocationAware"
@@ -45,6 +46,11 @@
         android:name=".alarm.AlarmActivity"
         android:label="@string/title_activity_alarm">
     </activity>
+    <receiver android:name=".global.BootReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
   </application>
 
 </manifest>

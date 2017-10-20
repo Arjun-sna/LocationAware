@@ -11,6 +11,8 @@ import java.util.List;
 public interface CheckPointDao {
   @Query("Select * from checkpoints") List<CheckPoint> getAllCheckPoints();
 
+  @Query("Select count(*) from checkpoints") int getCount();
+
   @Insert long insertNewCheckPoint(CheckPoint checkPoint);
 
   @Update int updateCheckPoint(CheckPoint checkPoint);
