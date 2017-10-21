@@ -47,6 +47,7 @@ dependencies {
 
   implementation 'com.google.android.gms:play-services-maps:11.4.2'
   implementation 'com.google.android.gms:play-services-location:11.4.2'
+  implementation 'com.google.android.gms:play-services-places:11.4.2'
 
   implementation "android.arch.persistence.room:runtime:1.0.0-alpha9"
   annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha9"

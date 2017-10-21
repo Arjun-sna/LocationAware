@@ -108,6 +108,10 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
     // TODO: 20/10/17 edit
   }
 
+  @Override public void onLocationSelected(double latitude, double longitude) {
+    getView().updateCurrentLocation(latitude, longitude);
+  }
+
   private void updateCurrentLocation() {
     locationProvider.getLastLocation(
         location -> getView().updateCurrentLocation(location.getLatitude(),

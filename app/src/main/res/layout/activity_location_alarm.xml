@@ -22,6 +22,20 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
     />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+    >
+      <fragment
+          android:id="@+id/search_places_fragment"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+      />
+    </android.support.v7.widget.CardView>
     <ImageView
         android:id="@+id/location_pin"
         android:layout_width="wrap_content"

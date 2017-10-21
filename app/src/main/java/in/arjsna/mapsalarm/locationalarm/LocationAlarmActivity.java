@@ -21,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -60,6 +64,7 @@ public class LocationAlarmActivity extends BaseActivity
   private FloatingActionButton currentLocationBtn;
   private FloatingActionButton checkPointsListBtn;
   private BottomSheetBehavior mBottomSheetBehavior;
+  private PlaceAutocompleteFragment autocompleteFragment;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -83,7 +88,8 @@ public class LocationAlarmActivity extends BaseActivity
     RecyclerView checkPointsList = findViewById(R.id.check_point_list_view);
     checkPointsList.setLayoutManager(new LinearLayoutManager(context));
     checkPointsList.setAdapter(checkPointsAdapter);
-
+    autocompleteFragment = (PlaceAutocompleteFragment)
+        getFragmentManager().findFragmentById(R.id.search_places_fragment);
     SupportMapFragment supportMapFragment =
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     supportMapFragment.getMapAsync(this);
@@ -106,6 +112,16 @@ public class LocationAlarmActivity extends BaseActivity
       }
 
       @Override public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+      }
+    });
+    autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+      @Override public void onPlaceSelected(Place place) {
+        locationPresenter.onLocationSelected(place.getLatLng().latitude,
+            place.getLatLng().longitude);
+      }
+
+      @Override public void onError(Status status) {
 
       }
     });

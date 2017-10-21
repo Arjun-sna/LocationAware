@@ -47,5 +47,7 @@ public interface LocationAlarmMVPContract {
     void onDeleteCheckPoint(int adapterPosition);
 
     void onEditCheckPoint(int adapterPosition);
+
+    void onLocationSelected(double latitude, double longitude);
   }
 }
