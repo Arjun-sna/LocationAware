@@ -17,5 +17,5 @@ public interface CheckPointDao {
 
   @Update int updateCheckPoint(CheckPoint checkPoint);
 
-  @Delete int deleteCheckPoint(CheckPoint checkPoint);
+  @Delete void deleteCheckPoint(CheckPoint checkPoint);
 }

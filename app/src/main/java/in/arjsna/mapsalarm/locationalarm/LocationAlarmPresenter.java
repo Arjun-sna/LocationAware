@@ -12,8 +12,10 @@ import in.arjsna.mapsalarm.db.CheckPointDataSource;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.LocationProvider;
 import in.arjsna.mapsalarm.mvpbase.BasePresenter;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -101,7 +103,24 @@ public class LocationAlarmPresenter<V extends LocationAlarmMVPContract.ILocation
   }
 
   @Override public void onDeleteCheckPoint(int adapterPosition) {
-    // TODO: 20/10/17 delete
+    getCheckPointDataSource().deleteCheckPoint(allCheckPoints.get(adapterPosition))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeWith(new CompletableObserver() {
+          @Override public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override public void onComplete() {
+            allCheckPoints.remove(adapterPosition);
+            getView().removeMarker(adapterPosition);
+            getView().notifyListAdapter();
+          }
+
+          @Override public void onError(Throwable e) {
+            getView().showError("Delete Failed");
+          }
+        });
   }
 
   @Override public void onEditCheckPoint(int adapterPosition) {

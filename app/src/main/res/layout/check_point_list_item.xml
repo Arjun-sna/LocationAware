@@ -16,23 +16,23 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/edit_check_point_name"
+        app:layout_constraintRight_toLeftOf="@id/delete_check_point"
         android:padding="10dp"
         android:textSize="16sp"
         android:textStyle="bold"
         android:text="adfadsf"
     />
-    <ImageView
-        android:id="@+id/edit_check_point_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_mode_edit"
-        app:layout_constraintLeft_toRightOf="@+id/check_point_name_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/delete_check_point"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/edit_check_point_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_mode_edit"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/check_point_name_tv"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/delete_check_point"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginEnd="10dp"/>-->
     <ImageView
         android:id="@+id/delete_check_point"
         android:layout_width="wrap_content"

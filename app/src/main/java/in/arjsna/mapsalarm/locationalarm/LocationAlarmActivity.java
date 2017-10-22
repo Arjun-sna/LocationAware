@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jakewharton.rxbinding2.view.RxView;
 import in.arjsna.mapsalarm.R;
@@ -39,6 +40,7 @@ import in.arjsna.mapsalarm.db.CheckPoint;
 import in.arjsna.mapsalarm.di.qualifiers.ActivityContext;
 import in.arjsna.mapsalarm.global.PermissionUtils;
 import in.arjsna.mapsalarm.mvpbase.BaseActivity;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class LocationAlarmActivity extends BaseActivity
@@ -51,6 +53,7 @@ public class LocationAlarmActivity extends BaseActivity
   private GoogleMap mMap;
   private boolean mPermissionDenied = false;
   private ImageView locationPin;
+  private ArrayList<Marker> mapMarker = new ArrayList<>();
 
   @Inject
   public CheckPointsAdapter checkPointsAdapter;
@@ -225,11 +228,11 @@ public class LocationAlarmActivity extends BaseActivity
 
   @Override
   public void addMarkerOnMap(CheckPoint checkPoint) {
-    mMap.addMarker(new MarkerOptions()
+    mapMarker.add(mMap.addMarker(new MarkerOptions()
         .icon(BitmapDescriptorFactory.fromResource(R.drawable.flag))
         .draggable(false)
         .position(new LatLng(checkPoint.getLatitude(), checkPoint.getLongitude()))
-        .title(checkPoint.getName()));
+        .title(checkPoint.getName())));
   }
 
   @Override
@@ -243,5 +246,9 @@ public class LocationAlarmActivity extends BaseActivity
 
   @Override public void notifyListAdapter() {
     checkPointsAdapter.notifyDataSetChanged();
+  }
+
+  @Override public void removeMarker(int adapterPosition) {
+    mapMarker.get(adapterPosition).remove();
   }
 }

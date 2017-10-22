@@ -44,7 +44,7 @@ public class CheckPointsAdapter
     private final LocationAlarmMVPContract.ILocationPresenter<LocationAlarmMVPContract.ILocationAlarmView>
         locationAlarmPresenter;
     TextView checkPointName;
-    ImageView editBtn;
+    //ImageView editBtn;
     ImageView deleteBtn;
 
     CheckPointViewHolder(View itemView,
@@ -52,7 +52,7 @@ public class CheckPointsAdapter
       super(itemView);
       this.locationAlarmPresenter = locationAlarmPresenter;
       checkPointName = itemView.findViewById(R.id.check_point_name_tv);
-      editBtn = itemView.findViewById(R.id.edit_check_point_name);
+      //editBtn = itemView.findViewById(R.id.edit_check_point_name);
       deleteBtn = itemView.findViewById(R.id.delete_check_point);
       bindEvents();
     }
@@ -62,8 +62,8 @@ public class CheckPointsAdapter
           v -> locationAlarmPresenter.onCheckPointItemClicked(getAdapterPosition()));
       deleteBtn.setOnClickListener(
           v -> locationAlarmPresenter.onDeleteCheckPoint(getAdapterPosition()));
-      editBtn.setOnClickListener(
-          v -> locationAlarmPresenter.onEditCheckPoint(getAdapterPosition()));
+      //editBtn.setOnClickListener(
+      //    v -> locationAlarmPresenter.onEditCheckPoint(getAdapterPosition()));
     }
   }
 }

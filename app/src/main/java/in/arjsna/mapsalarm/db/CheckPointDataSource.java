@@ -1,5 +1,6 @@
 package in.arjsna.mapsalarm.db;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class CheckPointDataSource {
     return Single.fromCallable(() -> checkPointDao.insertNewCheckPoint(checkPoint) > 1);
   }
 
-  public Single<Boolean> deleteCheckPoint(CheckPoint checkPoint) {
-    return Single.fromCallable(() -> checkPointDao.deleteCheckPoint(checkPoint) > 1);
+  public Completable deleteCheckPoint(CheckPoint checkPoint) {
+    return Completable.fromAction(() -> checkPointDao.deleteCheckPoint(checkPoint));
   }
 
   public Single<Integer> getCheckPointCount() {

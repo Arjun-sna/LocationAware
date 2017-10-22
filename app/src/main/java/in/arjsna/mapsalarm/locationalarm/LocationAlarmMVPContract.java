@@ -24,6 +24,8 @@ public interface LocationAlarmMVPContract {
     void showBottomSheet();
 
     void notifyListAdapter();
+
+    void removeMarker(int adapterPosition);
   }
 
   interface ILocationPresenter<V extends ILocationAlarmView> extends IMVPPresenter<V> {
