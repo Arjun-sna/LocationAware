@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">LocAware</string>
+  <string name="app_name">LoctionAware</string>
   <string name="location_permission_denied">This Application requires location permission to be
     enabled.
   </string>
